@@ -1,0 +1,32 @@
+{
+  "name": "booktime",
+  "version": "1.0.0",
+  "description": "E-commerce for Books products",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "Steven CIBAMBO",
+  "license": "ISC",
+  "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "jest": "^28.1.0",
+    "webpack": "^5.72.1",
+    "webpack-bundle-tracker": "^1.5.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "jest": {
+    "moduleDirectories": [
+      "node_modules",
+      "frontend"
+    ],
+    "testURL": "http://localhost/"
+  },
+  "dependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
+  }
+}

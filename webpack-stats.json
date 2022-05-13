@@ -1,0 +1,14 @@
+{
+  "status": "done",
+  "assets": {
+    "imageswitcher.bundle.js": {
+      "name": "imageswitcher.bundle.js",
+      "path": "/home/maestro/Public/Project/python/booktime/main/static/bundles/imageswitcher.bundle.js"
+    }
+  },
+  "chunks": {
+    "imageswitcher": [
+      "imageswitcher.bundle.js"
+    ]
+  }
+}

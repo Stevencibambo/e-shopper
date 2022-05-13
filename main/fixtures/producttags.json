@@ -1,0 +1,47 @@
+[
+{
+  "model": "main.producttag",
+  "fields": {
+    "name": "Life",
+    "slug": "life",
+    "description": "",
+    "active": true
+  }
+},
+{
+  "model": "main.producttag",
+  "fields": {
+    "name": "Fiction",
+    "slug": "fiction",
+    "description": "",
+    "active": true
+  }
+},
+{
+  "model": "main.producttag",
+  "fields": {
+    "name": "Science",
+    "slug": "science",
+    "description": "",
+    "active": true
+  }
+},
+{
+  "model": "main.producttag",
+  "fields": {
+    "name": "Motivation",
+    "slug": "motivation",
+    "description": "",
+    "active": true
+  }
+},
+{
+  "model": "main.producttag",
+  "fields": {
+    "name": "Litteracture",
+    "slug": "litteracture",
+    "description": "",
+    "active": true
+  }
+}
+]

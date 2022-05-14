@@ -12,6 +12,11 @@ from django.urls import reverse
 from main import forms
 from main import models
 import logging
+from django.contrib.auth.mixins import (LoginRequiredMixin, UserPassesTestMixin)
+from  django import forms as django_forms
+from django.db import models as django_models
+import django_filters
+from django_filters.views import FilterView
 
 
 class ContactUsView(FormView):
@@ -143,6 +148,35 @@ class AddressSelectionView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
+class DateInput(django_forms.DateInput):
+    input_type = 'date'
+
+
+class OrderFilter(django_filters.FilterSet):
+    class Meta:
+        model = models.Order
+        fields = {
+            'user__email': ['icontains'],
+            'status': ['exact'],
+            'date_updated': ['gt', 'lt'],
+            'date_added': ['gt', 'lt'],
+        }
+        filter_overrides = {
+            django_models.DateTimeField: {
+                'filter_class': django_filters.DateFilter,
+                'extra': lambda f: {'widget': DateInput}
+            }
+        }
+
+
+class OrderView(UserPassesTestMixin, FilterView):
+    filterset_class = OrderFilter
+    login_url = reverse_lazy('login')
+
+    def test_func(self):
+        return self.request.user.is_staff is True
+
+
 def add_to_basket(request):
     product = get_object_or_404(models.Product, pk=request.GET.get("product_id"))
     basket = request.basket
@@ -176,3 +210,4 @@ def manage_basket(request):
     if request.basket.is_empty():
         return render(request, "basket.html", {"formset": None})
     return render(request, "basket.html", {"formset": formset})
+

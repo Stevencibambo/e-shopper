@@ -186,6 +186,7 @@ def add_to_basket(request):
         else:
             user = None
         basket = models.Basket.objects.create(user=user)
+        request.session["basket_id"] = basket.id
 
     basketline, created = models.BasketLine.objects.get_or_create(basket=basket, product=product)
     if not created:
@@ -209,5 +210,6 @@ def manage_basket(request):
 
     if request.basket.is_empty():
         return render(request, "basket.html", {"formset": None})
+
     return render(request, "basket.html", {"formset": formset})
 

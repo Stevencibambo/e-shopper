@@ -7,6 +7,7 @@ from django.contrib.auth.forms import (UserCreationForm as DjangoUserCreationFor
 from django.contrib.auth.forms import UsernameField
 from django.contrib.auth import authenticate
 from django.forms import inlineformset_factory
+
 BasketLineFormSet = inlineformset_factory(
     models.Basket,
     models.BasketLine,

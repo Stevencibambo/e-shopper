@@ -1,4 +1,5 @@
-{% block "base.html" %}
+{% extends "base.html" %}
+
 {% block content %}
   <h1>List of your address:</h1>
   {% for address in object_list %}

@@ -93,6 +93,14 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     objects = UserManager()
 
+    @property
+    def is_employee(self):
+        return self.is_active and (self.is_superuser or self.is_staff and self.groups.filter(name="Employees").exists())
+
+    @property
+    def is_dispatcher(self):
+        return self.is_active and (self.is_superuser or self.is_staff and self.groups.filter(name="Dispatchers").exists())
+
 
 class Address(models.Model):
     SUPPORTED_COUNTRIES = (
@@ -126,10 +134,10 @@ class Basket(models.Model):
     status = models.IntegerField(choices=STATUSES, default=OPEN)
 
     def is_empty(self):
-        return self.basketline_set.all.count() == 0
+        return self.basketline_set.all().count() == 0
 
     def count(self):
-        return sum(i.quantity for i in self.basketline_set.all)
+        return sum(i.quantity for i in self.basketline_set.all())
 
     def create_order(self, billing_address, shipping_address):
         if not self.user:
@@ -173,7 +181,7 @@ class Basket(models.Model):
 class BasketLine(models.Model):
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator])
+    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
 
 
 class Order(models.Model):

@@ -23,11 +23,11 @@ import debug_toolbar
 
 urlpatterns = [
     path('', include('main.urls')),
-    path('user/', include('django.contrib.auth.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.main_admin.urls),
     path('office-admin/', admin.central_office_admin.urls),
     path('dispatch-admin/', admin.dispatchers_admin.urls),
     path('__debug__/', include(debug_toolbar.urls)),
+    path('user/', include('django.contrib.auth.urls')),
     # path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
@@ -11,6 +12,7 @@ from main import forms
 router = routers.DefaultRouter()
 router.register(r'orderlines', endpoints.PaidOrderLineViewSet)
 router.register(r'orders', endpoints.PaidOrderViewSet)
+
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
@@ -33,8 +35,9 @@ urlpatterns = [
     path("address/<int:pk>/", views.AddressUpdateView.as_view(), name="address_update"),
     path("address/<int:pk>/delete", views.AddressDeleteView.as_view(), name="address_delete"),
 
-    path("login/", auth_views.LoginView.as_view(template_name="login.html", form_class=forms.AuthenticationForm,), name="login"),
+    path("login/", auth_views.LoginView.as_view(template_name="login.html", form_class=forms.AuthenticationForm,), name="log-in"),
     path("signup/", views.SignupView.as_view(), name="signup"),
 
     path("api/", include(router.urls)),
+    path("customer-service/<int:order_id>/", views.room, name="cs_chat",),
 ]

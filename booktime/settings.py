@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_tables2',
     'rest_framework',
+    'rest_framework.authtoken',
     'main.apps.MainConfig',
 ]
 
@@ -132,7 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "main.User"
 
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -212,7 +212,9 @@ WEBPACK_LOADER = {
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication', 'rest_framework.authentication.BasicAuthentication'),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',
+                                       'rest_framework.authentication.BasicAuthentication',
+                                       'rest_framework.authentication.BasicAuthentication'),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.DjangoModelPermissions',),
     'DEFAULT_FILTER_BACKEND': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

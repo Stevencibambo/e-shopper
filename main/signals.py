@@ -1,12 +1,14 @@
-from io import BytesIO
-import logging
-from PIL import Image
 from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
-from .models import ProductImage
 from django.contrib.auth.signals import user_logged_in
+from django.conf import settings
+from rest_framework.authtoken.models import Token
 from .models import Basket, ProductImage, OrderLine, Order
+from .models import ProductImage
+from io import BytesIO
+from PIL import Image
+import logging
 
 
 THUMBNAIL_SIZE = (300, 300)
@@ -55,3 +57,9 @@ def orderline_to_order_status(sender, instance, **kwargs):
         logger.info("All lines for order %d have been processed. Marking as done.", instance.order.id, )
         instance.order.status = Order.DONE
         instance.order.save()
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

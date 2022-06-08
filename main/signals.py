@@ -5,7 +5,7 @@ from django.contrib.auth.signals import user_logged_in
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 from .models import Basket, ProductImage, OrderLine, Order
-from .models import ProductImage
+from .models import ProductImage, ProductTag, ProductSubTag
 from io import BytesIO
 from PIL import Image
 import logging
@@ -15,9 +15,8 @@ THUMBNAIL_SIZE = (300, 300)
 logger = logging.getLogger(__name__)
 
 
-@receiver(pre_save, sender=ProductImage)
-def generate_thumbnail(sender, instance, **kwargs):
-    logger.info("Generating thumbnail for product %d", instance.product.id,)
+def generate_thumbnail(instance):
+    logger.info("Generating thumbnail for Tag Product %d", instance.id)
     image = Image.open(instance.image)
     image = image.convert("RGB")
     image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
@@ -31,6 +30,21 @@ def generate_thumbnail(sender, instance, **kwargs):
         save=False
     )
     temp_thumb.close()
+
+
+@receiver(pre_save, sender=ProductImage)
+def product_thumbnail(sender, instance, **kwargs):
+    generate_thumbnail(instance)
+
+
+@receiver(pre_save, sender=ProductTag)
+def tag_thumbnail(sender, instance, **kwargs):
+    generate_thumbnail(instance)
+
+
+@receiver(pre_save, sender=ProductSubTag)
+def sub_tag_thumbnail(sender, instance, **kwargs):
+    generate_thumbnail(instance)
 
 
 @receiver(user_logged_in)

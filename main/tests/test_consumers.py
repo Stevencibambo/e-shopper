@@ -2,6 +2,8 @@
 
 import asyncio
 import json
+from unittest.mock import patch, MagicMock
+
 from django.contrib.auth.models import Group
 from django.test import TestCase
 from channels.db import database_sync_to_async
@@ -21,7 +23,7 @@ class TestConsumers(TestCase):
             )
             order = factories.OrderFactory(user=user)
             cs_user = factories.UserFactory(
-                email="customerservice@booktime.domain",
+                email="customerservice@eshopper.domain",
                 first_name="Adam",
                 last_name="Ford",
                 is_staff=True,
@@ -138,7 +140,7 @@ class TestConsumers(TestCase):
             )
             order = factories.OrderFactory(user=user)
             cs_user = factories.UserFactory(
-                email="customerservice@booktime.domain",
+                email="customerservice@eshopper.domain",
                 first_name="Adam",
                 last_name="Ford",
                 is_staff=True
@@ -200,6 +202,34 @@ class TestConsumers(TestCase):
             payload = response["body"][6:]
             data = json.loads(payload.decode("utf8"))
             self.assertEquals(data, [], "expecting no one in the room but someone found",)
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(test_body())
+
+    def test_order_tracker_works(self):
+        def init_db():
+            user = factories.UserFactory(email="mobiletracker@site.com")
+            order = factories.OrderFactory(user=user)
+            return user, order
+
+        async def test_body():
+            user, order = await database_sync_to_async(init_db)()
+            awaitable_requestor = asyncio.coroutine(MagicMock(return_value=b"SHIPPED"))
+            with patch.object(consumers.OrderTrackerConsumer, "query_remote_server") as mock_requestor:
+                mock_requestor.side_effect = awaitable_requestor
+                communicator = HttpCommunicator(
+                    consumers.OrderTrackerConsumer,
+                    "GET",
+                    "/mobile-api/my-orders/%d/tracker/" % order.id,)
+
+                communicator.scope["user"] = user
+                communicator.scope["url_route"] = {
+                    "kwargs": {"order_id": order.id}
+                }
+                response = await communicator.get_response()
+                data = response["body"].decode("utf8")
+                mock_requestor.assert_called_once()
+                self.assertEquals(data, "SHIPPED")
 
         loop = asyncio.get_event_loop()
         loop.run_until_complete(test_body())

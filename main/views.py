@@ -7,16 +7,17 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import (FormView, CreateView, UpdateView, DeleteView)
+from django.contrib.auth.mixins import (LoginRequiredMixin, UserPassesTestMixin)
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django import forms as django_forms
+from django.db import models as django_models
+from django_filters.views import FilterView
+from django.core.paginator import Paginator
+import django_filters
 from main import forms
 from main import models
 import logging
-from django.contrib.auth.mixins import (LoginRequiredMixin, UserPassesTestMixin)
-from  django import forms as django_forms
-from django.db import models as django_models
-import django_filters
-from django_filters.views import FilterView
 
 
 class ContactUsView(FormView):
@@ -30,7 +31,7 @@ class ContactUsView(FormView):
 
 
 class ProductTagsListView(ListView):
-    template_name = "main/product_tags_list.html"
+    template_name = "main/product_tags.html"
     paginate_by = 5
 
     def get_queryset(self):
@@ -175,6 +176,25 @@ class OrderView(UserPassesTestMixin, FilterView):
 
     def test_func(self):
         return self.request.user.is_staff is True
+
+
+def all_products(request):
+    template_name = "main/product_tags.html"
+    tags = models.ProductTag.objects.all()
+    products = models.Product.objects.all()
+    products = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    products = products.get_page(page_number)
+
+    return render(request, template_name, {'tags': tags, 'products': products})
+
+
+def product_detail(request, slug):
+    template_name = "main/product_detail.html"
+    product = models.Product.objects.get(slug=slug)
+    tags = models.ProductTag.objects.all()
+
+    return render(request, template_name, {'product': product, 'tags': tags})
 
 
 def add_to_basket(request):

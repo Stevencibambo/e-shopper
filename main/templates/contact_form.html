@@ -1,30 +1,76 @@
 {% extends "base.html" %}
-
+{% block title %} Contact {% endblock %}
 {% block content %}
-<div class="container">
-    <h2>Contact us</h2>
-    <p>Please fill the form below to contact us</p>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.name.label_tag }}
-            <input type="text" class="form-control {% if form.name.errors %} is-invalid {% endif %}" id="id_name" name="name" placeholder="Your name" value="{{ form.name.value|default:'' }}">
-            {% if form.name.errors %}
-            <div class="invalid-feedback">
-                {{ form.name.errors }}
+<div id="contact-page" class="container">
+    <div class="bg">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="contact-form">
+                    <h2 class="title text-center">{{ "Get In Touch" }}</h2>
+                    <div class="status alert alert-success" style="display: none"></div>
+                    <form id="main-contact-form" class="contact-form row" method="post">
+                        {% csrf_token %}
+                        <div class="form-group col-md-6">
+                            <input type="text" id="id_name" name="name" class="form-control {% if form.name.errors %} is-invalid {% endif %}" required="required" placeholder="Name" value="{{ form.name.value|default:'' }}">
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="email" id="id_mail" name="email" class="form-control {% if form.email.errors %} is-invalid {% endif %}" value="{{ form.email.value|default:'' }}" required="required" placeholder="Email">
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group col-md-12">
+                            <input type="text" id="id_subject" name="subject" class="form-control {% if form.subject.errors %} is-invalid {% endif %}" value="{{ form.subject.value|default:'' }}" required="required" placeholder="Subject">
+                            {% if form.subject.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.subject.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group col-md-12">
+                            <textarea name="message" id="message" class="form-control {% if form.message.errors %} is-invalid {% endif %}" value="{{ form.message.value|default:'' }}" required="required"  rows="8" placeholder="Your Message Here"></textarea>
+                            {% if form.message.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.message.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group col-md-12">
+                            <input type="submit" name="submit" class="btn btn-primary pull-right" value="Submit">
+                        </div>
+                    </form>
+                </div>
             </div>
-            {% endif %}
-        </div>
-        <div class="form-group">
-         {{ form.message.label_tag }}
-            <textarea class="form-control {% if form.message.errors %}is-invalid{% endif %}" id="id_message" name="message" rows="3">{{ form.message.value|default:""}}</textarea>
-            {% if form.message.errors %}
-            <div class="invalid-feedback">
-                {{ form.message.errors }}
+            <div class="col-sm-4">
+                <div class="contact-info">
+                    <h2 class="title text-center">{{ "Contact Info" }}</h2>
+                    <address>
+                        <p>E-Shopper Inc.</p>
+                        <p>935 W. Webster Ave New Streets Chicago, IL 60614, NY</p>
+                        <p>Newyork USA</p>
+                        <p>Mobile: +2346 17 38 93</p>
+                        <p>Fax: 1-714-252-0026</p>
+                        <p>Email: info@e-shopper.com</p>
+                    </address>
+                    <div class="social-networks">
+                        <h2 class="title text-center">{{ "Social Networking" }}</h2>
+                        <ul>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
 </div>
 {% endblock content %}

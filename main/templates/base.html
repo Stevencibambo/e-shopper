@@ -120,8 +120,9 @@
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active {% endif %}">Home</a></li>
-								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
+								<li class="dropdown"><a href="#">{{ "Shop" }}<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
+                                        <li><a href="{% url 'product_tags' %}">{{ "All products" }}</a></li>
                                         <li><a href="{% url 'product_tags' %}">{{ "Books" }}</a></li>
 										<li><a href="product-details.html">Product Details</a></li>
                                     </ul>
@@ -134,6 +135,7 @@
                                 </li>
 								<li><a href="404.html">404</a></li>
 								<li><a href="{% url 'contact_us' %}" class="{% if request.resolver_match.url_name == 'contact_us' %} active {% endif %}">Contact</a></li>
+								<li><a href="{% url 'about_us' %}" class="{% if request.resolver_match.url_name == 'about_us' %} active {% endif %}">About us</a></li>
 							</ul>
 						</div>
 					</div>
@@ -346,6 +348,7 @@
 <script src="{% static 'js/js/jquery.prettyPhoto.js' %}"></script>
 <script src="{% static 'js/js/main.js' %}"></script>
 {% block js %}
+
 {% endblock js %}
 </body>
 </html>

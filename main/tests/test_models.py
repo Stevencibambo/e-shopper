@@ -1,3 +1,5 @@
+# Here is the test model of main app
+
 from django.test import TestCase
 from main import models
 from main import factories

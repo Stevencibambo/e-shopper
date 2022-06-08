@@ -6,10 +6,11 @@ from main import forms
 
 class TestForm(TestCase):
     def test_valid_contact_us_form_sends_email(self):
-        """ test the valid form """
         form = forms.ContactForm({
             'name': "Luke Skywalker",
-            'message': "Hi there"
+            'email': "luke@example.com",
+            'subject': "Information",
+            'message': "Hi there, there is someone online please",
         })
         self.assertTrue(form.is_valid())
         with self.assertLogs('main.forms', level="INFO") as cm:
@@ -19,7 +20,6 @@ class TestForm(TestCase):
         self.assertGreaterEqual(len(cm.output), 1)
 
     def test_invalid_contact_us_form(self):
-        """ test the invalid form """
         form = forms.ContactForm({
             'message': 'Hi there'
         })

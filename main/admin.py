@@ -1,5 +1,4 @@
 import tempfile
-
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
@@ -34,11 +33,11 @@ make_inactive.short_description = "Mark selected items as inactive"
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'in_stock', 'price')
+    list_display = ('name', 'tag_name', 'slug', 'in_stock', 'price')
     list_filter = ('active', 'in_stock', 'date_updated')
-    list_editable = ('in_stock', )
-    search_fields = ('name', )
-    autocomplete_fields = ('tags', )
+    list_editable = ('in_stock',)
+    search_fields = ('name',)
+    autocomplete_fields = ('tags',)
     prepopulated_fields = {"slug": ("name",)}
     actions = [make_active, make_inactive]
 
@@ -55,6 +54,10 @@ class ProductAdmin(admin.ModelAdmin):
         else:
             return {}
 
+    def tag_name(self, obj):
+        tag = obj.tags
+        return tag.name
+
 
 class DispatchersProductAdmin(ProductAdmin):
     readonly_fields = ("description", "price", "tags", "active")
@@ -63,9 +66,18 @@ class DispatchersProductAdmin(ProductAdmin):
 
 
 class ProductTagAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug")
+    list_filter = ("active",)
+    search_fields = ("name",)
+    readonly_fields = ("thumbnail",)
+    prepopulated_fields = {"slug": ("name",)}
+
+
+class ProductSubTagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     list_filter = ('active', )
-    search_fields = ('name', )
+    search_fields = ('name',)
+    readonly_fields = ("thumbnail",)
     prepopulated_fields = {"slug": ("name",)}
 
     def get_readonly_fields(self, request, obj=None):
@@ -348,6 +360,7 @@ class ReportingColoredAdminSite(ColoredAdminSite):
         extra_context = {"reporting_pages": reporting_pages}
         return super().index(request, extra_context)
 
+
 class InvoiceMixin:
     def get_urls(self):
         urls = super().get_urls()
@@ -418,6 +431,7 @@ class PeriodSelectForm(forms.Form):
 main_admin = OwnersAdminSite()
 main_admin.register(models.Product, ProductAdmin)
 main_admin.register(models.ProductTag, ProductTagAdmin)
+main_admin.register(models.ProductSubTag, ProductSubTagAdmin)
 main_admin.register(models.ProductImage, ProductImageAdmin)
 main_admin.register(models.User, UserAdmin)
 main_admin.register(models.Address, AddressAdmin)
@@ -427,6 +441,7 @@ main_admin.register(models.Order, OrderAdmin)
 central_office_admin = CentralOfficeAdminSite("central-office-admin")
 central_office_admin.register(models.Product, ProductAdmin)
 central_office_admin.register(models.ProductTag, ProductTagAdmin)
+central_office_admin.register(models.ProductSubTag, ProductSubTagAdmin)
 central_office_admin.register(models.ProductImage, ProductImageAdmin)
 central_office_admin.register(models.Address, AddressAdmin)
 central_office_admin.register(models.Order, CentralOfficeAdmin)
@@ -434,4 +449,5 @@ central_office_admin.register(models.Order, CentralOfficeAdmin)
 dispatchers_admin = DispatchersAdminSite("dispatchers-admin")
 dispatchers_admin.register(models.Product, DispatchersProductAdmin)
 dispatchers_admin.register(models.ProductTag, ProductTagAdmin)
+dispatchers_admin.register(models.ProductSubTag, ProductSubTagAdmin)
 dispatchers_admin.register(models.Order, DispatcherOrderAdmin)

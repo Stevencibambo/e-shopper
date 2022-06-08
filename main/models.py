@@ -1,13 +1,13 @@
+# Here is definition of whole models of the main app
+#
 from django.db import models
-from django.contrib.auth.models import (
-AbstractUser,
-BaseUserManager,
-)
+from django.contrib.auth.models import (AbstractUser, BaseUserManager,)
 from django.core.validators import MinValueValidator
-from django.db.models import Count, Sum
-
+from django.db.models import Count
+from django.db.models import Sum
 from main.exceptions.basket_exception import BasketException
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,10 +25,26 @@ class ProductTagsManager(models.Manager):
 
 
 class ProductTag(models.Model):
-    name = models.CharField(max_length=40)
-    slug = models.SlugField(max_length=48)
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=64)
     description = models.TextField(blank=True)
     active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to="tag-image", null=True)
+    thumbnail = models.ImageField(upload_to="tag-thumbnail", null=True)
+    objects = ProductTagsManager()
+
+    def __str__(self):
+        return self.name
+
+
+class ProductSubTag(models.Model):
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=64)
+    description = models.TextField(blank=True)
+    active = models.BooleanField(default=True)
+    tag = models.ForeignKey(ProductTag, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="subtag-image", null=True)
+    thumbnail = models.ImageField(upload_to="subtag-thumbnail", null=True)
     objects = ProductTagsManager()
 
     def __str__(self):
@@ -46,7 +62,7 @@ class Product(models.Model):
     active = models.BooleanField(default=True)
     in_stock = models.BooleanField(default=True)
     date_updated = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField(ProductTag, blank=True)
+    tags = models.ManyToManyField(ProductSubTag, blank=True)
     objects = ActiveManager()
 
     def __str__(self):

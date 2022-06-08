@@ -1,4 +1,7 @@
-from django.shortcuts import render
+"""
+url of main app
+author <steven@gmail.com>
+"""
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
@@ -20,8 +23,8 @@ urlpatterns = [
     path("contact-us/", views.ContactUsView.as_view(), name="contact_us"),
     path("about-us/", TemplateView.as_view(template_name="about_us.html"), name="about_us"),
 
-    path("products/", views.ProductTagsListView.as_view(), name="product_tags"),
-    path("product/<slug:slug>/", DetailView.as_view(model=models.Product), name="product"),
+    path("products/", views.all_products, name="product_tags"),
+    path("product/<slug:slug>/", views.product_detail, name="product"),
     path("products/<slug:tag>/", views.ProductListView.as_view(), name="products"),
 
     path("order/done", TemplateView.as_view(template_name="order_done.html"), name="checkout_done"),

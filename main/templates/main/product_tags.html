@@ -10,7 +10,7 @@
 			<div class="product-image-wrapper">
 				<div class="single-products">
 					<div class="productinfo text-center">
-						<img src="images/home/product1.jpg" alt="" />
+						<img src="{{ product.image }}" alt="IMG Product" class="w-75" />
 						<h2>${{ product.price }}</h2>
 						<p>{{ product.name|truncatechars:25 }}</p>
 						<a href="{% url 'product' product.slug %}" class="btn btn-default add-to-cart"><i class="fa fa-info-circle"></i>{{ "Detail" }}</a>

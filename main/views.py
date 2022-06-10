@@ -182,6 +182,11 @@ def all_products(request):
     template_name = "main/product_tags.html"
     tags = models.ProductTag.objects.all()
     products = models.Product.objects.all()
+    for product in products:
+        image = product.productimage_set.all()[:1]
+        if image:
+            product.image = image[0].thumbnail.url
+
     products = Paginator(products, 10)
     page_number = request.GET.get('page')
     products = products.get_page(page_number)
@@ -193,6 +198,7 @@ def product_detail(request, slug):
     template_name = "main/product_detail.html"
     product = models.Product.objects.get(slug=slug)
     tags = models.ProductTag.objects.all()
+
 
     return render(request, template_name, {'product': product, 'tags': tags})
 

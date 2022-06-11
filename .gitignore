@@ -104,6 +104,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
+eshopper/settings.py
 env/
 venv/
 ENV/

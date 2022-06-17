@@ -11,7 +11,7 @@ from django.forms import inlineformset_factory
 BasketLineFormSet = inlineformset_factory(
     models.Basket,
     models.BasketLine,
-    fields=("quantity", ),
+    fields=("quantity",),
     extra=0,
     widgets={"quantity": widgets.PlusMinusNumberInput()},
 )

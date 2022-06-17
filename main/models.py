@@ -47,6 +47,9 @@ class ProductSubTag(models.Model):
     thumbnail = models.ImageField(upload_to="subtag-thumbnail", null=True)
     objects = ProductTagsManager()
 
+    class Meta:
+        verbose_name = 'product_sub_tag'
+
     def __str__(self):
         return self.name
 

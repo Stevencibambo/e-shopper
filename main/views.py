@@ -45,11 +45,11 @@ class ProductListView(ListView):
     paginate_by = 4
 
     def get_queryset(self):
-        tag = self.kwargs['tag']
+        tag = self.kwargs['subtag']
         self.tag = None
         if tag != 'all':
             self.tag = get_object_or_404(
-                models.ProductTag, slug=tag
+                models.ProductSubTag, slug=tag
             )
         if self.tag:
             products = models.Product.objects.active().filter(
@@ -194,11 +194,32 @@ def all_products(request):
     return render(request, template_name, {'tags': tags, 'products': products})
 
 
+def tag_products(request, tag, subtag):
+    template_name = "main/tag_products.html"
+    tags = models.ProductTag.objects.active()
+    p_tag = None
+    if tag is not None and subtag is not None:
+        p_tag = get_object_or_404(models.ProductSubTag, slug=subtag)
+    else:
+        return HttpResponseRedirect(reverse("products"))
+
+    products = models.Product.objects.active().filter(tags=p_tag)
+    for product in products:
+        image = product.productimage_set.all()[:1]
+        if image:
+            product.image = image[0].thumbnail.url
+
+    products = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    products = products.get_page(page_number)
+
+    return render(request, template_name, {'tags': tags, 'products': products})
+
+
 def product_detail(request, slug):
     template_name = "main/product_detail.html"
     product = models.Product.objects.get(slug=slug)
     tags = models.ProductTag.objects.all()
-
 
     return render(request, template_name, {'product': product, 'tags': tags})
 

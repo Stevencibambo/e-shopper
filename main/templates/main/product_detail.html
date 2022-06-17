@@ -45,7 +45,7 @@
                     <span>US $59</span>
                     <label>Quantity:</label>
                     <input type="text" value="3" />
-                    <a href="{% url 'add_to_basket' %}?product_id={{ object.id}}" class="btn btn-fefault cart">
+                    <a href="{% url 'add_to_basket' %}?product_id={{ product.id }}" class="btn btn-default cart">
                         <i class="fa fa-shopping-cart"></i>{{ "Add to cart" }}
                     </a>
                 </span>

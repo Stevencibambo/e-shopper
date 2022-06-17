@@ -1,9 +1,10 @@
 $(function(){
     $('.btn-number').click(function(e){
         e.preventDefault();
+        console.log("Test")
         fieldName = $(this).attr('data-field');
         type = $(this).attr('data-type');
-        var input = $("input[name'" + fieldName + "']");
+        var input = $("input[name='" + fieldName + "']");
         var currentVal = parseInt(input.val());
         if(type == 'minus'){
             if(currentVal > input.attr('min')){

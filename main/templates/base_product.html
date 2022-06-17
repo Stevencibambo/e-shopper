@@ -19,17 +19,18 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
+									<a data-toggle="collapse" data-parent="#accordian" href="#{{tag.slug}}">
 										<span class="badge pull-right"><i class="fa fa-plus"></i></span>
 										{{ tag.name }}
 									</a>
 								</h4>
 							</div>
-							<div id="sportswear" class="panel-collapse collapse">
+							<div id="{{ tag.slug }}" class="panel-collapse collapse">
 								<div class="panel-body">
 									<ul>
-										<li><a href="">Nike </a></li>
-										<li><a href="">Under Armour </a></li>
+										{% for sub in tag.productsubtag_set.all %}
+										<li><a href="{% url 'products' tag.slug sub.slug %}">{{ sub.name }}</a></li>
+										{% endfor %}
 									</ul>
 								</div>
 							</div>

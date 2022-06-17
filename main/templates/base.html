@@ -88,7 +88,7 @@
 							<ul class="nav navbar-nav">
 								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="{% url 'basket' %}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<li><a href="{% url 'basket' %}"><i class="fa fa-shopping-cart"></i> Cart ({{ request.basket.count }})</a></li>
 								{% if request.user.is_authenticated %}
 								<li class="dropdown"><a href="#"><i class="fa fa-user"></i>Account <i class="fa fa-angle-down"></i></a>
 									<ul role="menu" class="sub-menu">
@@ -169,10 +169,6 @@
 {% for message in messages %}
 	<div class="alert alert-{{message.tags}}">{{ message }}</div>
 {% endfor %}
-
-{% if request.basket %}
-	<div>{{ request.basket.count }} items in basket</div>
-{% endif %}
 
 {% block content %}
 

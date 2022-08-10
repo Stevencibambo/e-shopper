@@ -20,6 +20,17 @@ from main import models
 import logging
 
 
+def home(request):
+    template_name = "home.html"
+    tags = models.ProductTag.objects.all()
+    products = models.Product.objects.all().order_by('-date_updated')[:6]
+    for product in products:
+        image = product.productimage_set.all()[:1]
+        if image:
+            product.image = image[0].thumbnail.url
+    return render(request, template_name, {'tags': tags, 'items': products})
+
+
 class ContactUsView(FormView):
     template_name = "contact_form.html"
     form_class = forms.ContactForm
@@ -218,8 +229,11 @@ def tag_products(request, tag, subtag):
 
 def product_detail(request, slug):
     template_name = "main/product_detail.html"
-    product = models.Product.objects.get(slug=slug)
     tags = models.ProductTag.objects.all()
+    product = models.Product.objects.get(slug=slug)
+    image = product.productimage_set.all()[:1]
+    if image:
+        product.image = image[0].thumbnail.url
 
     return render(request, template_name, {'product': product, 'tags': tags})
 

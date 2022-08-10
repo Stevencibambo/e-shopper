@@ -7,7 +7,7 @@
     <div class="product-details"><!--product-details-->
         <div class="col-sm-5">
             <div class="view-product">
-                <img src="{% static 'images/product-details/1.jpg' %}" alt="" />
+                <img src="{{ product.image }}" alt="IMG Product" />
                 <h3>ZOOM</h3>
             </div>
             <div id="similar-product" class="carousel slide" data-ride="carousel">
@@ -44,7 +44,7 @@
                 <span>
                     <span>US $59</span>
                     <label>Quantity:</label>
-                    <input type="text" value="3" />
+                    <input type="text" value="1" />
                     <a href="{% url 'add_to_basket' %}?product_id={{ product.id }}" class="btn btn-default cart">
                         <i class="fa fa-shopping-cart"></i>{{ "Add to cart" }}
                     </a>
